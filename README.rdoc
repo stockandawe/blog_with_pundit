@@ -1,6 +1,6 @@
-## Notes
+== Notes
 
-### Create a new app and add devise and pundit and configure
+=== Create a new app and add devise and pundit and configure
 
 - ```ruby rails new blog_with_pundit```
 - In Gemfile:
@@ -11,15 +11,15 @@
 - Generate a User model (with a role attribute) with devise ```rails g devise User role```
 - Generate a Post model:
     - ```rails g scaffold Post user_id:integer title:string body:text```
-- ```rake db:migrate``` & add the root path to ```root 'posts#index'```
+- ```rake db:migrate``` & add the root path to ```root 'posts=index'```
 - Configure/install Pundit ```rails g pundit:install```
     - This should create an application_policy.rb that is by default designed to lockdown access to everything
 
-### Get Pundit to do it's thing
+=== Get Pundit to do it's thing
 
 - In ApplicationController: ```include Pundit```
 
-### Add policies for Post model
+=== Add policies for Post model
 - Create a post_policy.rb
 - Override the index? method from application_policy.rb
 ```ruby
@@ -32,21 +32,21 @@ end
 authorize @posts
 ```
 
-### Use helper methods to only show links when authorized to use
+=== Use helper methods to only show links when authorized to use
 ```
 <% if policy(Post).new? %>
   <%= link_to 'New Post', new_post_path %>
 <% end %>
 ```
 
-### Check for authorization in all controllers
+=== Check for authorization in all controllers
 In ApplicationController: ```after_action :verify_authorized```
 
-### Assign has_many and belongs_to relationships
+=== Assign has_many and belongs_to relationships
 - In user.rb ```has_many :posts```
 - In post.rb ```belongs_to :user```
 
-### Make devise actions work
+=== Make devise actions work
 - Since we are verifying authorization for all controller actions, we need to create an exception for devise actions
 - Update the after_action in ApplicationController: ````after_action :verify_authorized, unless: :devise_controller?```
 - Test this by adding signup, login and logout links in application.html.erb
@@ -60,7 +60,7 @@ In ApplicationController: ```after_action :verify_authorized```
 <% end %>
 ```
 
-### Roles-based authorization
+=== Roles-based authorization
 - Add some method to check for user roles in user.rb
 ```
 def admin?
